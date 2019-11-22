@@ -38,9 +38,9 @@ class TestUserAddToBasketFromProductPage(object):
     
     def test_guest_cant_see_success_message(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
-        self.page = ProductPage(browser, link)
-        self.page.open()
-        self.page.should_not_be_success_message()
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
     
     def test_guest_can_add_product_to_basket(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
