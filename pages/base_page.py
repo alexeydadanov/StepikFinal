@@ -70,4 +70,10 @@ class BasePage():
 
     def should_be_login_link(self):
         assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
+    
+    def go_to_login_page(self):
+        self.browser.find_element(*BasePageLocators.LOGIN_LINK).click()
+        #return LoginPage(browser=self.browser, url=self.browser.current_url)     #2nd way to implicit navigation between pages
 
+    def go_to_basket_page(self):
+        self.browser.find_element(*BasePageLocators.VIEW_BASKET).click()
