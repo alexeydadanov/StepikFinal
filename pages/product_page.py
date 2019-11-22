@@ -7,6 +7,12 @@ class ProductPage(BasePage):
     def should_be_add_product_to_basket(self):
         button_add_to_basket = self.browser.find_element(*ProductPageLocators.ADD_BUTTON)
         button_add_to_basket.click()
+        
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), "Success message is presented, but should not be"
+
+    def should_disappear_success_message(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), "Message isn't dissapeared after adding product to basket"
     
     #def should_be_button_add(self):
         # реализуйте проверку, что есть форма логина
