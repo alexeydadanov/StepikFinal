@@ -6,17 +6,7 @@ from selenium.common.exceptions import NoAlertPresentException # в начале
 import math
 import time
 import pytest
-
-
-#def test_guest_can_add_product_to_basket(browser):
-#    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
-#    page = ProductPage(browser, link)
-#   page.open()
-#    product_page = ProductPage(browser, browser.current_url)
-#    page.should_be_add_product_to_basket()
-#    time.sleep(1)
-#    product_page.solve_quiz_and_get_code()
-    #product_page.check_add_item_to_basket()
+import random
 
 #def test_user_cant_see_success_message(browser):
 #    """Тест нет success_message"""
@@ -25,6 +15,42 @@ import pytest
 #    page.open()
 #    product_page = ProductPage(browser, browser.current_url)
 #    product_page.should_not_be_success_message()
+
+def get_random_email_pass(): # utility function
+    random.seed()
+    fake_email = 'fake{}@fmail.com'.format(str(int(random.random()*100000)))
+    fake_pass = 'ilovestepik'
+    return (fake_email, fake_pass)
+
+@pytest.mark.register_user
+class TestUserAddToBasketFromProductPage(object):
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com"
+        page = MainPage(browser, link) # initialization Page Object of main page
+        page.open()
+        page.go_to_login_page()
+
+        new_page = LoginPage(page.browser, browser.current_url)
+        new_page.register_new_user(*get_random_email_pass())
+        new_page.should_be_authorized_user()
+    
+    
+    def test_guest_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
+        self.page = ProductPage(browser, link)
+        self.page.open()
+        self.page.should_not_be_success_message()
+    
+    def test_guest_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
+        page = ProductPage(browser, link)
+        page.open()
+        product_page = ProductPage(browser, browser.current_url)
+        page.should_be_add_product_to_basket()
+        time.sleep(1)
+        product_page.solve_quiz_and_get_code()
+        #product_page.check_add_item_to_basket()
 
 
 
@@ -38,11 +64,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     page.should_not_be_success_message()
     
 
-def test_guest_cant_see_success_message(browser):
-    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
-    page = ProductPage(browser, link)
-    page.open()
-    page.should_not_be_success_message()
+
     
 @pytest.mark.xfail
 def test_message_disappeared_after_adding_product_to_basket(browser):
